@@ -1,11 +1,186 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import { posters } from "../lib/posters.js";
+import "../styles/global.css";
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+
+<main class="page">
+  <header class="header">
+    <h1 id="pageTitle">OneDayOnePoster</h1>
+    <p class="sub">The ODOP Project stands for One Day One Poster. It is a daily practice of creating one poster during my military service as a design student, leading up to my discharge on February 12, 2026.
+	
+</p>
+
+   <div class="actions">
+  <button class="btn" type="button" data-action="shuffle">Shuffle</button>
+  <button class="btn" type="button" data-sort="no">No</button>
+</div>
+
+  </header>
+
+  <section class="grid" aria-label="poster grid">
+ {posters.map((p) => (
+  <article class="card" data-poster-id={p.id} data-no={p.no} data-date={p.date}>
+    <a class="cardLink" href={`/odop/${p.no3}`}>
+      <div class="thumb">
+        <img
+          src={p.img}
+          alt={p.title}
+          loading="lazy"
+          width="600"
+          height="850"
+        />
+      </div>
+    </a>
+
+    <div class="meta">
+      <time class="date" datetime={p.date}>{p.date}</time>
+      <h2 class="title">{p.title}</h2>
+    </div>
+  </article>
+))}
+
+  </section>
+</main>
+
+<script is:inline>
+  document.addEventListener("DOMContentLoaded", () => {
+    const grid = document.querySelector(".grid");
+    if (!grid) return;
+
+    const shuffleBtn = document.querySelector('[data-action="shuffle"]');
+    const sortNoBtn = document.querySelector('[data-sort="no"]');
+
+    function shuffleInPlace(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+    }
+
+    function resort(compareFn) {
+      const cards = Array.from(grid.children);
+      cards.sort(compareFn);
+      cards.forEach((c) => grid.appendChild(c));
+    }
+
+    shuffleBtn?.addEventListener("click", () => {
+      const cards = Array.from(grid.children);
+      shuffleInPlace(cards);
+      cards.forEach((c) => grid.appendChild(c));
+    });
+
+    sortNoBtn?.addEventListener("click", () => {
+      resort((a, b) => Number(a.dataset.no) - Number(b.dataset.no));
+    });
+  });
+</script>
+
+
+
+
+<style>
+  .page {
+  padding: 28px;
+  font-family: system-ui,-helvetica, -apple-system, sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+
+  .header {
+    margin-bottom: 20px;
+  }
+
+.sub {
+  margin-top: 8px;
+  color: rgba(249, 249, 249, 0.72);
+}
+
+.date {
+  font-size: 12px;
+  color: rgba(249, 249, 249, 0.6);
+}
+
+
+  .actions {
+    margin-top: 16px;
+    display: flex;
+    gap: 8px;
+  }
+
+  .btn {
+  padding: 10px 12px;
+  border: 1px solid rgba(249, 249, 249, 0.22);
+  border-radius: 5px; /* ✅ 둥근 모서리 제거 */
+  background: transparent;
+  color: #00FFAA;     /* ✅ 버튼 글자색 */
+  cursor: pointer;
+}
+
+
+ .grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  align-items: start;
+}
+
+
+  .card {
+  border: 0px solid rgba(249, 249, 249, 0.12);
+  border-radius: 5px; /* ✅ 둥근 모서리 제거 */
+  overflow: hidden;
+  background: transparent;
+}
+
+.thumb {
+  height: 260px;         /* 그리드에서 썸네일 높이 통일 */
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;     /* 꽉 채우되 넘치면 잘림 */
+  display: block;
+}
+
+  .meta {
+    padding: 10px 12px;
+  }
+
+  .date {
+    font-size: 12px;
+    opacity: 0.7;
+  }
+
+  .title {
+    margin: 2px 0 0;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  /* Play 모드: 약간의 ‘흩뿌림’ 느낌(아주 약하게) */
+  body.play .card {
+    transform: rotate(-0.6deg);
+  }
+  body.play .card:nth-child(2n) {
+    transform: rotate(0.6deg);
+  }
+  :global(body) {
+  margin: 0;
+  background: #181818;
+  color: #f9f9f9;
+}
+
+:global(*) {
+  box-sizing: border-box;
+}
+.cardLink {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+

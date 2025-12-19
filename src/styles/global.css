@@ -1,0 +1,18 @@
+ @font-face {
+  font-family: "Pretendard";
+  src: url("/fonts/PretendardVariable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  background: #090909;
+  color: #f9f9f9;
+  font-family: "Pretendard", system-ui, Helvetica, "Helvetica Neue",-apple-system, "Apple SD Gothic Neo", sans-serif;
+}
