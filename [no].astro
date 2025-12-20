@@ -31,9 +31,13 @@ const { p, prev, next } = Astro.props;
     </nav>
   </header>
 
-  <section class="viewer">
-    <img class="poster" src={p.img} alt={p.title} />
-  </section>
+<section class="viewer" data-mode="scroll" data-viewer>
+  <div class="stage">
+    <img class="poster" src={p.img} alt={p.title} data-poster />
+  </div>
+</section>
+
+
 </main>
 
 <style>
@@ -44,7 +48,7 @@ const { p, prev, next } = Astro.props;
   }
 
   .detail {
-    max-width: 1100px;
+    max-width: 1000px;
     margin: 0 auto;
     padding: 24px;
   }
@@ -77,6 +81,7 @@ const { p, prev, next } = Astro.props;
 
   .btn {
     border: 1px solid rgba(249, 249, 249, 0.22);
+    font-size: var(--ui-font-size);
     padding: 8px 10px;
     border-radius: 0;
     background: transparent;
@@ -93,6 +98,44 @@ const { p, prev, next } = Astro.props;
   .viewer {
     border: 1px solid rgba(249, 249, 249, 0.12);
   }
+/* viewer가 “이미지 표시 영역”이고, JS가 --avail 값을 넣어줌 */
+.viewer {
+  --avail: 80vh; /* JS 계산 실패 시 안전값 */
+}
+
+/* stage: 실제 이미지가 들어가는 프레임 */
+.stage {
+  border: 1px solid rgba(249, 249, 249, 0.12);
+  background: #090909;
+}
+
+/* 기본: Scroll 모드 (가로 100% / 세로는 스크롤) */
+.viewer[data-mode="scroll"] .stage {
+  height: var(--avail);
+  overflow: auto;
+}
+
+.viewer[data-mode="scroll"] .poster {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* 클릭 토글: Fit 모드 (세로를 화면에 딱 맞추고 전체가 보이게) */
+.viewer[data-mode="fit"] .stage {
+  height: var(--avail);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.viewer[data-mode="fit"] .poster {
+  max-height: 100%;
+  max-width: 100%;
+  width: auto;
+  height: auto;
+  display: block;
+}
 
   .poster {
     width: 100%;

@@ -8,7 +8,7 @@ import "../styles/global.css";
   <header class="header">
     <h1 id="pageTitle">OneDayOnePoster</h1>
     <p class="sub">The ODOP Project stands for One Day One Poster. It is a daily practice of creating one poster during my military service as a design student, leading up to my discharge on February 12, 2026.
-	
+
 </p>
 
    <div class="actions">
@@ -24,7 +24,7 @@ import "../styles/global.css";
     <a class="cardLink" href={`/odop/${p.no3}`}>
       <div class="thumb">
         <img
-          src={p.img}
+          src={p.thumb}
           alt={p.title}
           loading="lazy"
           width="600"
@@ -45,6 +45,7 @@ import "../styles/global.css";
 
 <script is:inline>
   document.addEventListener("DOMContentLoaded", () => {
+    
     const grid = document.querySelector(".grid");
     if (!grid) return;
 
@@ -55,6 +56,7 @@ import "../styles/global.css";
       for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [arr[i], arr[j]] = [arr[j], arr[i]];
+        
       }
     }
 
@@ -73,6 +75,7 @@ import "../styles/global.css";
     sortNoBtn?.addEventListener("click", () => {
       resort((a, b) => Number(a.dataset.no) - Number(b.dataset.no));
     });
+
   });
 </script>
 
@@ -112,6 +115,7 @@ import "../styles/global.css";
   .btn {
   padding: 10px 12px;
   border: 1px solid rgba(249, 249, 249, 0.22);
+  font-size: var(--ui-font-size);
   border-radius: 5px; /* ✅ 둥근 모서리 제거 */
   background: transparent;
   color: #00FFAA;     /* ✅ 버튼 글자색 */
@@ -148,7 +152,7 @@ import "../styles/global.css";
 }
 
   .meta {
-    padding: 10px 12px;
+    padding: 6px 12px;
   }
 
   .date {
@@ -157,17 +161,9 @@ import "../styles/global.css";
   }
 
   .title {
-    margin: 2px 0 0;
+    margin: 0px 0 0;
     font-size: 14px;
     font-weight: 600;
-  }
-
-  /* Play 모드: 약간의 ‘흩뿌림’ 느낌(아주 약하게) */
-  body.play .card {
-    transform: rotate(-0.6deg);
-  }
-  body.play .card:nth-child(2n) {
-    transform: rotate(0.6deg);
   }
   :global(body) {
   margin: 0;

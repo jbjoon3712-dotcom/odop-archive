@@ -8,6 +8,7 @@
 
 :root {
   color-scheme: dark;
+   --ui-font-size: 14px; /* 여기 숫자만 바꾸면 전체가 같이 바뀜 */
 }
 
 body {
