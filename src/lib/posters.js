@@ -3,7 +3,7 @@
 export const startDate = new Date(2025, 7, 15, 12, 0, 0);
  // 2025-12-01 (월=0부터, 11=12월)
 
-export const posters = Array.from({ length: 125 }).map((_, i) => {
+export const posters = Array.from({ length: 127 }).map((_, i) => {
   const no = i + 1;
   const no3 = String(no).padStart(3, "0");
 
