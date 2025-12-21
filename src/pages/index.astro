@@ -1,25 +1,25 @@
 ---
 import { posters } from "../lib/posters.js";
 import "../styles/global.css";
+const postersSorted = [...posters].sort((a, b) => b.no - a.no); // ✅ 기본: 내림차순
 ---
 
 
 <main class="page">
   <header class="header">
     <h1 id="pageTitle">OneDayOnePoster</h1>
-    <p class="sub">The ODOP Project stands for One Day One Poster. It is a daily practice of creating one poster during my military service as a design student, leading up to my discharge on February 12, 2026.
-
-</p>
+    <p class="sub">The ODOP Project stands for One Day One Poster. It is a daily practice of creating one poster during JEBI's military service as a design student, leading up to my discharge on February 12, 2026.
+    </p>
 
    <div class="actions">
   <button class="btn" type="button" data-action="shuffle">Shuffle</button>
-  <button class="btn" type="button" data-sort="no">No</button>
+  <button class="btn" type="button" data-sort="no">Order</button>
 </div>
 
   </header>
 
   <section class="grid" aria-label="poster grid">
- {posters.map((p) => (
+ {postersSorted.map((p) => (
   <article class="card" data-poster-id={p.id} data-no={p.no} data-date={p.date}>
     <a class="cardLink" href={`/odop/${p.no3}`}>
       <div class="thumb">
@@ -72,9 +72,23 @@ import "../styles/global.css";
       cards.forEach((c) => grid.appendChild(c));
     });
 
-    sortNoBtn?.addEventListener("click", () => {
-      resort((a, b) => Number(a.dataset.no) - Number(b.dataset.no));
-    });
+  let noAsc = false; // ✅ 기본: 내림차순(false)
+
+sortNoBtn?.addEventListener("click", () => {
+  // 토글
+  noAsc = !noAsc;
+
+  resort((a, b) => {
+    const A = Number(a.dataset.no);
+    const B = Number(b.dataset.no);
+    return noAsc ? A - B : B - A;
+  });
+
+  // (선택) 버튼 라벨 표시
+  //sortNoBtn.textContent = noAsc ? "No ↑" : "No ↓";
+});
+
+
 
   });
 </script>
@@ -92,12 +106,13 @@ import "../styles/global.css";
 
 
   .header {
-    margin-bottom: 20px;
+    margin-bottom: 40px;
   }
 
 .sub {
   margin-top: 8px;
   color: rgba(249, 249, 249, 0.72);
+   max-width: 78ch;   /* ✅ 한 줄 길이 제한(글자폭 기준) */
 }
 
 .date {
@@ -110,6 +125,7 @@ import "../styles/global.css";
     margin-top: 16px;
     display: flex;
     gap: 8px;
+    margin-bottom: 28px;
   }
 
   .btn {
@@ -179,4 +195,3 @@ import "../styles/global.css";
   color: inherit;
   text-decoration: none;
 }
-

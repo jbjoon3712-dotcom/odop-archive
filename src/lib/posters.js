@@ -1,6 +1,6 @@
 // src/lib/posters.js
 
-export const startDate = new Date(2025, 7, 14, 12, 0, 0);
+export const startDate = new Date(2025, 7, 15, 12, 0, 0);
  // 2025-12-01 (월=0부터, 11=12월)
 
 export const posters = Array.from({ length: 125 }).map((_, i) => {
