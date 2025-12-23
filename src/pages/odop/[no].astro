@@ -13,7 +13,13 @@ export function getStaticPaths() {
   });
 }
 const { p, prev, next } = Astro.props;
+import { getEntry } from "astro:content";
 
+const { no } = Astro.params;
+const key = String(no).padStart(3, "0");   // ✅ "1" -> "001"
+const odopEntry = await getEntry("odop", key);
+
+const renderResult = odopEntry ? await odopEntry.render() : null;
 ---
 
 <style>
@@ -222,4 +228,28 @@ const { p, prev, next } = Astro.props;
     font-display: swap;
   }
 
+</style>
+
+{/* ... 네 기존 상세페이지 코드(이미지/prev/next 등) ... */}
+
+<section class="odopText">
+  {renderResult ? <renderResult.Content /> : (
+    <p class="missing">아직 작성된 소개 텍스트가 없어.</p>
+  )}
+</section>
+
+<style>
+  .odopText {
+    margin-top: 18px;
+    line-height: 1.65;
+    color: rgba(249, 249, 249, 0.82);
+  }
+
+  /* md 문단 간격 */
+  .odopText :global(p) { margin: 0 0 12px; }
+  .odopText :global(ul) { margin: 0 0 12px; padding-left: 18px; }
+
+  .missing {
+    opacity: 0.6;
+  }
 </style>

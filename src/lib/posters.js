@@ -3,9 +3,6 @@
 export const startDate = new Date(2025, 7, 15, 12, 0, 0);
  // 2025-12-01 (월=0부터, 11=12월)
 const descMap = {
-  "001": "여기에 ODOP 001 소개글", 
-  "002": "여기에 ODOP 002 소개글",
-  "003": "여기에 ODOP 003 소개글",
 };
 
 export const posters = Array.from({ length: 129 }).map((_, i) => {
