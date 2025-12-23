@@ -12,10 +12,16 @@ export function getStaticPaths() {
     };
   });
 }
-
 const { p, prev, next } = Astro.props;
+
 ---
 
+<style>
+  .row { display:flex; gap:10px; margin-top:6px; }
+  .k { opacity:.7; min-width:72px; }
+  .note { margin-top:14px; border-top:1px solid rgba(249,249,249,.12); padding-top:14px; }
+  .note .v :global(p) { margin: 0 0 10px; line-height: 1.6; }
+</style>
 <main class="detail">
 <header class="top">
   <div class="topRow">
@@ -34,7 +40,8 @@ const { p, prev, next } = Astro.props;
 
   <hr class="rule" />
   <p class="desc">
-    {p.desc ?? "You are beutiful. 아름다우세요. 상세페이지123"}
+   {p.desc && <p class="desc">{p.desc}</p>}
+
   </p>
 </header>
 
