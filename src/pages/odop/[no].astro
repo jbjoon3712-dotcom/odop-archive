@@ -17,8 +17,6 @@ export function getStaticPaths() {
 
 const { p, prev, next } = Astro.props;
 const { no } = Astro.params; // "001"
-
-// ✅ Astro v5: getEntryBySlug 대신 getEntry 사용
 const entry = await getEntry("odop", no);
 const rendered = entry ? await entry.render() : null;
 
