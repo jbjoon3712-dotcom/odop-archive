@@ -17,3 +17,57 @@ body {
   color: #f9f9f9;
   font-family: "Pretendard", system-ui, Helvetica, "Helvetica Neue",-apple-system, "Apple SD Gothic Neo", sans-serif;
 }
+/* 클릭 가능하게 */
+.posterBtn {
+  display: block;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  width: 100%;
+  cursor: zoom-in;
+}
+
+/* 오버레이 */
+.zoom[hidden] { display: none; }
+
+.zoom {
+  position: fixed;
+  inset: 0;
+  background: rgba(9, 9, 9, 0.92);
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 18px;
+}
+
+.zoomImg {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain; /* 화면에 딱 맞게 ‘전부 보이게’ */
+  cursor: zoom-out;
+}
+
+/* 닫기 버튼 */
+.zoomClose {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+
+  border: 1px solid rgba(249, 249, 249, 0.22);
+  padding: 10px 12px;
+  font-size: var(--ui-font-size);
+  border-radius: 5px;
+  background: transparent;
+  color: #f9f9f9;
+  cursor: pointer;
+}
+
+/* 오버레이 열릴 때 스크롤 잠금 */
+:global(body.zoomOpen) {
+  overflow: hidden;
+}

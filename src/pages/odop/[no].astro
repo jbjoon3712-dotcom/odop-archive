@@ -74,22 +74,81 @@ const data = rendered?.data ?? {};
 
   <section class="viewer">
     <div class="stage">
-      <img class="poster" src={p.img} alt={p.title} />
-    </div>
+  <button class="posterBtn" type="button" data-zoom-open aria-label="Open fullscreen view">
+    <img class="poster" src={p.img} alt={p.title} />
+  </button>
+</div>
+
   </section>
 
   <section class="note">
     {Content ? <Content /> : <p class="missing">행복합시다.</p>}
   </section>
+  <div class="zoom" data-zoom hidden>
+  <button class="zoomClose" type="button" data-zoom-close aria-label="Close fullscreen view">✕</button>
+  
+  <img class="zoomImg" data-zoom-img alt="" />
+</div>
+
 </main>
 
 <script is:inline>
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") window.location.href = "/";
-    if (e.key === "ArrowLeft") document.querySelector('[data-nav="prev"]')?.click();
-    if (e.key === "ArrowRight") document.querySelector('[data-nav="next"]')?.click();
+  document.addEventListener("DOMContentLoaded", () => {
+    const zoom = document.querySelector("[data-zoom]");
+    const zoomImg = document.querySelector("[data-zoom-img]");
+    const openBtn = document.querySelector("[data-zoom-open]");
+    const closeBtn = document.querySelector("[data-zoom-close]");
+
+    function openZoom() {
+      if (!openBtn || !zoom || !zoomImg) return;
+      const img = openBtn.querySelector("img");
+      if (!img) return;
+
+      zoomImg.src = img.currentSrc || img.src;
+      zoomImg.alt = img.alt || "Poster";
+
+      zoom.hidden = false;
+      document.body.classList.add("zoomOpen");
+    }
+
+    function closeZoom() {
+      if (!zoom) return;
+      zoom.hidden = true;
+      document.body.classList.remove("zoomOpen");
+      if (zoomImg) zoomImg.src = "";
+    }
+
+    openBtn?.addEventListener("click", openZoom);
+    closeBtn?.addEventListener("click", closeZoom);
+
+    zoom?.addEventListener("click", (e) => {
+      if (e.target === zoom) closeZoom();
+    });
+
+    // ✅ 키보드 핸들링을 "상태 분기"로 정리
+    document.addEventListener("keydown", (e) => {
+      const zoomOpen = zoom && !zoom.hidden;
+
+      if (e.key === "Escape") {
+        if (zoomOpen) {
+          e.preventDefault();
+          closeZoom();
+        } else {
+          window.location.href = "/";
+        }
+      }
+
+      if (!zoomOpen && e.key === "ArrowLeft") {
+        document.querySelector('[data-nav="prev"]')?.click();
+      }
+
+      if (!zoomOpen && e.key === "ArrowRight") {
+        document.querySelector('[data-nav="next"]')?.click();
+      }
+    });
   });
 </script>
+
 
 <style>
   :global(body) {
@@ -220,7 +279,7 @@ const data = rendered?.data ?? {};
   }
 
   .stage {
-    border: 1px solid rgba(249, 249, 249, 0.12);
+    border: 0px solid rgba(249, 249, 249, 0.12);
     background: #090909;
     padding: 10px;
   }
@@ -265,4 +324,24 @@ const data = rendered?.data ?? {};
     opacity: 0.6;
     margin: 0;
   }
+
+
+  .closeBtn {
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(249, 249, 249, 0.22);
+  border-radius: 8px;          /* 네모 느낌 + 살짝 라운드 */
+  background: rgba(0,0,0,0.25);
+  color: #f9f9f9;
+  font-size: 18px;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.closeBtn:hover {
+  background: rgba(255,255,255,0.06);
+}
+
 </style>
