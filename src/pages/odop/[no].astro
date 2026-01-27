@@ -16,8 +16,10 @@ export function getStaticPaths() {
 }
 
 const { p, prev, next } = Astro.props;
-const { no } = Astro.params; // "001"
-const entry = await getEntry("odop", no);
+const { no } = Astro.params;
+const key = String(no).padStart(3, "0");  // 1 -> "001"
+const entry = await getEntry("odop", key);
+
 const rendered = entry ? await entry.render() : null;
 
 const Content = rendered?.Content ?? null;
