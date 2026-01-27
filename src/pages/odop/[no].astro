@@ -1,30 +1,36 @@
 ---
 import { posters } from "../../lib/posters.js";
-import "../../styles/global.css";
 import { getEntry } from "astro:content";
+import "../../styles/global.css";
 
 export function getStaticPaths() {
-  return posters.map((p, idx) => {
-    const prev = posters[idx - 1] ?? null;
-    const next = posters[idx + 1] ?? null;
-
-    return {
-      params: { no: p.no3 },     // /odop/001
-      props: { p, prev, next },  // 페이지에서 사용할 데이터
-    };
-  });
+  return posters.map((p, idx) => ({
+    params: { no: p.no3 },
+    props: {
+      p,
+      prev: posters[idx - 1] ?? null,
+      next: posters[idx + 1] ?? null,
+    },
+  }));
 }
 
 const { p, prev, next } = Astro.props;
 const { no } = Astro.params;
-const key = String(no).padStart(3, "0");  // 1 -> "001"
-const entry = await getEntry("odop", key);
 
-const rendered = entry ? await entry.render() : null;
+const key = no; // padStart 불필요
 
-const Content = rendered?.Content ?? null;
-const data = rendered?.data ?? {};
+const entry = await getEntry("odop", no);
+if (!entry) {
+  return new Response("Not found", { status: 404 });
+}
+
+const { Content } = await entry.render();
+const data = entry.data;  // ✅ 여기! render()가 아니라 entry.data
+
+
+
 ---
+
 
 <main class="detail">
   <header class="top">
