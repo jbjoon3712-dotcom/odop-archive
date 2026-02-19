@@ -218,8 +218,22 @@ nextLink?.addEventListener("click", (e) => {
   }
 
   .back {
-    color: rgba(249, 249, 249, 0.7);
-    text-decoration: none;
+     display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 10px 7px;
+
+  border: 1px solid rgba(255,255,255,0.22);
+  border-radius: 5px;
+
+  color: #f9f9f9;
+  text-decoration: none;
+
+  transition: transform 160ms ease,
+              filter 160ms ease,
+              border-color 160ms ease,
+              background 160ms ease;
   }
 
   .nav {
@@ -386,7 +400,7 @@ nextLink?.addEventListener("click", (e) => {
 }
 
 .zoomImg {
-  max-width: 92vw;
+  max-width: None;
   max-height: 92vh;
   object-fit: contain;
 
@@ -444,5 +458,67 @@ if (e.key === "ArrowRight") {
   right: 24px;
   z-index: 1100;
 }
+.back:hover {
+  transform: scale(0.96);
+  filter: brightness(0.85);
+}
+
+.back:active {
+  transform: scale(0.94);
+  filter: brightness(0.75);
+  /* active(클릭 순간) 더 강하게 */
+  color: #00FFAA;
+  transform: scale(0.95);
+}
+}
+.back:focus-visible {
+  outline: 2px solid rgba(255,255,255,0.35);
+  outline-offset: 3px;
+}
+
+/* ✅ Prev/Next (그리고 btn 전부) 인터랙션 */
+.btn {
+  transition: transform 160ms ease, filter 160ms ease, opacity 160ms ease, border-color 160ms ease, background 160ms ease;
+  transform-origin: center;
+  will-change: transform, filter;
+}
+
+.btn:hover {
+  transform: scale(0.96);
+  filter: brightness(0.85);
+}
+
+.btn:active {
+  transform: scale(0.94);
+  filter: brightness(0.75);
+}
+
+.btn:focus-visible {
+  outline: 2px solid rgba(255,255,255,0.35);
+  outline-offset: 3px;
+}
+
+/* 비활성(Prev/Next 없는 경우)에서는 hover/active가 안 먹게 */
+.btn.disabled,
+.btn:disabled {
+  transform: none !important;
+  filter: none !important;
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+.btn {
+  transition: 
+    transform 160ms ease,
+    filter 160ms ease,
+    color 180ms ease,
+    border-color 180ms ease;
+}
+
+/* active(클릭 순간) 더 강하게 */
+.btn:active {
+  color: #00FFAA;
+  transform: scale(0.95);
+}
+
 
 </style>
