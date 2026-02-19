@@ -183,7 +183,7 @@ sortNoBtn?.addEventListener("click", () => {
   }
   :global(body) {
   margin: 0;
-  background: #181818;
+  background: #121212;
   color: #f9f9f9;
 }
 
@@ -218,4 +218,21 @@ sortNoBtn?.addEventListener("click", () => {
   color: #00ffaa; /* 포인트 컬러 */
 }
 
+/* Order/Shuffle 버튼 공통 인터랙션 */
+.btn {
+  transition: transform 160ms ease, filter 160ms ease, opacity 160ms ease, border-color 160ms ease;
+  transform-origin: center;
+  will-change: transform, filter;
+}
+
+/* 클릭 순간은 조금 더 눌리는 느낌 */
+.btn:active {
+  transform: scale(0.94);
+  filter: brightness(0.78);
+}
+/* 키보드 접근성(탭) */
+.btn:focus-visible {
+  outline: 2px solid rgba(255,255,255,0.35);
+  outline-offset: 3px;
+}
 </style>

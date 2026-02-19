@@ -91,10 +91,10 @@ const data = entry.data;  // ✅ 여기! render()가 아니라 entry.data
 
   <section class="note">
     {Content ? <Content /> : <p class="missing">행복합시다.</p>}
+
   </section>
   <div class="zoom" data-zoom hidden>
-  <button class="zoomClose" type="button" data-zoom-close aria-label="Close fullscreen view">✕</button>
-  
+
   <img class="zoomImg" data-zoom-img alt="" />
 </div>
 
@@ -105,7 +105,7 @@ const data = entry.data;  // ✅ 여기! render()가 아니라 entry.data
     const zoom = document.querySelector("[data-zoom]");
     const zoomImg = document.querySelector("[data-zoom-img]");
     const openBtn = document.querySelector("[data-zoom-open]");
-    const closeBtn = document.querySelector("[data-zoom-close]");
+  
 
     function openZoom() {
       if (!openBtn || !zoom || !zoomImg) return;
@@ -127,7 +127,6 @@ const data = entry.data;  // ✅ 여기! render()가 아니라 entry.data
     }
 
     openBtn?.addEventListener("click", openZoom);
-    closeBtn?.addEventListener("click", closeZoom);
 
     zoom?.addEventListener("click", (e) => {
       if (e.target === zoom) closeZoom();
@@ -154,7 +153,41 @@ const data = entry.data;  // ✅ 여기! render()가 아니라 entry.data
         document.querySelector('[data-nav="next"]')?.click();
       }
     });
+    const params = new URLSearchParams(window.location.search);
+    const shouldOpenZoom = params.get("zoom") === "1";
+    if (shouldOpenZoom) openZoom();
+
+    function withZoomParam(href) {
+    const url = new URL(href, window.location.origin);
+   url.searchParams.set("zoom", "1");
+   return url.pathname + url.search;
+    }
+
+    function withoutZoomParam(href) {
+   const url = new URL(href, window.location.origin);
+   url.searchParams.delete("zoom");
+   return url.pathname + url.search;
+   }
+
+   const prevLink = document.querySelector('[data-nav="prev"]');
+   const nextLink = document.querySelector('[data-nav="next"]');
+
+   prevLink?.addEventListener("click", (e) => {
+    if (zoom && !zoom.hidden) {
+    e.preventDefault();
+    window.location.href = withZoomParam(prevLink.href);
+  }
+});
+
+nextLink?.addEventListener("click", (e) => {
+  if (zoom && !zoom.hidden) {
+    e.preventDefault();
+    window.location.href = withZoomParam(nextLink.href);
+  }
+});
+
   });
+  
 </script>
 
 
@@ -198,7 +231,7 @@ const data = entry.data;  // ✅ 여기! render()가 아니라 entry.data
     border: 1px solid rgba(249, 249, 249, 0.22);
     padding: 10px 12px;
     font-size: var(--ui-font-size);
-    border-radius: 5px;
+    border-radius: 4px;
     background: transparent;
     color: #f9f9f9;
     text-decoration: none;
@@ -335,10 +368,10 @@ const data = entry.data;  // ✅ 여기! render()가 아니라 entry.data
 
 
   .closeBtn {
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   border: 1px solid rgba(249, 249, 249, 0.22);
-  border-radius: 5px;          /* 네모 느낌 + 살짝 라운드 */
+  border-radius: 4px;          /* 네모 느낌 + 살짝 라운드 */
   background: rgba(0,0,0,0.25);
   color: rgba(249, 249, 249, 0.22);
   font-size: 18px;
@@ -350,6 +383,66 @@ const data = entry.data;  // ✅ 여기! render()가 아니라 entry.data
 
 .closeBtn:hover {
   background: rgba(255,255,255,0.06);
+}
+
+.zoomImg {
+  max-width: 92vw;
+  max-height: 92vh;
+  object-fit: contain;
+
+  border: 1px solid rgba(255,255,255,0.25);
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.05);
+}
+
+/* zoom 오버레이 */
+.zoom {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.72);
+  display: grid;
+  place-items: center;
+  z-index: 1000;
+}
+
+/* nav를 zoom보다 위로 */
+.nav {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 1100;
+}
+
+
+if (e.key === "ArrowLeft") {
+  document.querySelector('[data-nav="prev"]')?.click();
+}
+if (e.key === "ArrowRight") {
+  document.querySelector('[data-nav="next"]')?.click();
+}
+
+/* ✅ hidden이면 무조건 안 보이게 (가장 중요) */
+.zoom[hidden] {
+  display: none !important;
+}
+
+/* ✅ 줌 오버레이 기본 스타일 */
+.zoom {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0,0,0,0.72);
+  display: grid;
+  place-items: center;
+  padding: 24px;.zoom 
+  pointer-events: none;
+}
+
+/* ✅ Prev/Next는 줌 위로 */
+.nav {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 1100;
 }
 
 </style>
